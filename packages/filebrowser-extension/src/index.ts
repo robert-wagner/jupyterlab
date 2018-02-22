@@ -387,6 +387,17 @@ function addCommands(app: JupyterLab, tracker: InstanceTracker<FileBrowser>, bro
     label: 'Copy Shareable Link'
   });
 
+  commands.addCommand(CommandIDs.copyPath, {
+    execute: () => {
+      const path = encodeURIComponent(browser.selectedItems().next().path);
+        
+      Clipboard.copyToSystem(path)
+    },
+    isVisible: () => toArray(browser.selectedItems()).length === 1,
+    iconClass: 'jp-MaterialIcon jp-CopyIcon',
+    label: 'Copy Path'
+  });
+
   commands.addCommand(CommandIDs.showBrowser, {
     execute: () => { app.shell.activateById(browser.id); }
   });
@@ -463,6 +474,7 @@ function createContextMenu(model: Contents.IModel, commands: CommandRegistry, re
   }
 
   menu.addItem({ command: CommandIDs.share });
+  menu.addItem({ command: CommandIDs.copyPath });
 
   return menu;
 }
